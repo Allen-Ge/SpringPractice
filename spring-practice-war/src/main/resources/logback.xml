@@ -36,13 +36,13 @@
 
 	<!-- 数据库操作日志 -->
 	<logger name="org.mybatis" additivity="true">
-		<level value="DEBUG" />
+		<level value="INFO" />
 	</logger>
 	<logger name="org.apache.ibatis" additivity="true">
-		<level value="DEBUG" />
+		<level value="INFO" />
 	</logger>
 	<logger name="java.sql" additivity="true">
-		<level value="DEBUG" />
+		<level value="INFO" />
 	</logger>
 
 	<!-- 日志输出级别 -->

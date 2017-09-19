@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.geyao.spring.practice.war.dao.UserMapper">
+	<resultMap id="BaseResultMap" type="cn.geyao.spring.practice.war.model.User">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="age" jdbcType="TINYINT" property="age" />
+		<result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="mark" jdbcType="TINYINT" property="mark" />
+	</resultMap>
+	<resultMap type="cn.geyao.spring.practice.war.model.User" id="UserWithLevelRetMap">
+		<id property="id" column="tu_id" />
+		<result property="name" column="tu_name" />
+		<result property="age" column="tu_age" />
+		<result property="addTime" column="tu_add_time" />
+		<result property="upateTime" column="tu_update_time" />
+		<result property="mark" column="tu_mark" />
+		<association property="userLevel"
+			javaType="cn.geyao.spring.practice.war.model.UserLevel">
+			<id property="id" column="tul_id" />
+			<result property="userId" column="tul_user_id" />
+			<result property="custLevel" column="tul_cust_level" />
+			<result property="addTime" column="tul_add_time" />
+			<result property="upateTime" column="tul_update_time" />
+			<result property="mark" column="tul_mark" />
+		</association>
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, name, age, add_time, update_time, mark
+	</sql>
+
+	<!-- 根据主键Id查询带星级信息的会员 -->
+	<select id="selectUserWithLevelByPrimarykey" parameterType="java.lang.Integer"
+		resultMap="UserWithLevelRetMap">
+		SELECT
+		*
+		FROM tb_user tu
+		JOIN tb_user_level tul ON tu.id = tul.user_id AND tul.mark = 0
+		WHERE
+		tu.id = #{id,jdbcType = INTEGER}
+		AND
+		tu.mark = 0
+	</select>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from tb_user
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		tb_user
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="cn.geyao.spring.practice.war.model.User">
+		insert into tb_user
+		(
+		id, name,
+		age,add_time, update_time, mark
+		)
+		values
+		(
+		#{id,jdbcType=INTEGER},
+		#{name,jdbcType=VARCHAR},#{age,jdbcType=TINYINT},#{addTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP}, #{mark,jdbcType=TINYINT}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="cn.geyao.spring.practice.war.model.User">
+		insert into tb_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="age != null">
+				age,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="mark != null">
+				mark,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="age != null">
+				#{age,jdbcType=TINYINT},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="mark != null">
+				#{mark,jdbcType=TINYINT},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="cn.geyao.spring.practice.war.model.User">
+		update tb_user
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="age != null">
+				age = #{age,jdbcType=TINYINT},
+			</if>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="mark != null">
+				mark = #{mark,jdbcType=TINYINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="cn.geyao.spring.practice.war.model.User">
+		update tb_user
+		set
+		name = #{name,jdbcType=VARCHAR},
+		age = #{age,jdbcType=TINYINT},
+		add_time = #{addTime,jdbcType=TIMESTAMP},
+		update_time =
+		#{updateTime,jdbcType=TIMESTAMP},
+		mark = #{mark,jdbcType=TINYINT}
+		where
+		id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>
